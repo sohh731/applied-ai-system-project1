@@ -17,17 +17,93 @@ Replace this paragraph with your own summary of what your version does.
 
 ## How The System Works
 
-Explain your design in plain language.
+Real-world recommenders like Spotify or YouTube analyze patterns across millions of users and songs — tracking what you skip, replay, or save — to build a detailed model of your taste. They use collaborative filtering (what people like you enjoyed) and content-based filtering (matching audio features of songs you liked to new ones). This simulation focuses on the content-based side: it takes a user's stated preferences and compares them directly against each song's features using a weighted scoring formula. Rather than learning from behavior over time, the system prioritizes explicit taste signals — genre match first, then mood, then how close a song's energy level is to what the user wants. The goal is a transparent, explainable recommender where you can see exactly why each song was chosen.
 
-Some prompts to answer:
+### Song Features
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+Each `Song` object stores the following attributes:
 
-You can include a simple diagram or bullet list if helpful.
+| Feature | Type | Description |
+|---|---|---|
+| `id` | int | Unique identifier |
+| `title` | str | Song title |
+| `artist` | str | Artist name |
+| `genre` | str | Genre label (e.g. pop, lofi, rock) |
+| `mood` | str | Mood label (e.g. happy, chill, intense) |
+| `energy` | float (0–1) | How energetic the track feels |
+| `tempo_bpm` | float | Beats per minute |
+| `valence` | float (0–1) | Musical positivity (high = upbeat) |
+| `danceability` | float (0–1) | How suitable the track is for dancing |
+| `acousticness` | float (0–1) | How acoustic (vs. electronic) the track sounds |
+
+### UserProfile Features
+
+Each `UserProfile` stores what the user has told the system about their taste:
+
+| Feature | Type | Description |
+|---|---|---|
+| `favorite_genre` | str | The genre they want to hear |
+| `favorite_mood` | str | The mood they are looking for |
+| `target_energy` | float (0–1) | Their preferred energy level |
+| `likes_acoustic` | bool | Whether they prefer acoustic over electronic sounds |
+
+### Algorithm Recipe
+
+The scoring formula is the core decision engine. Every song is judged by the same seven rules in order, and the results are summed into a single score:
+
+| Rule | Feature | Max Points | How it works |
+|---|---|---|---|
+| 1 | Genre match | **+3.0** | Full points if `song.genre == user.favorite_genre`, zero otherwise |
+| 2 | Mood match | **+2.0** | Full points if `song.mood == user.favorite_mood`, zero otherwise |
+| 3 | Energy proximity | **up to +1.5** | `1.5 × (1 - \|target_energy - song.energy\|)` — closer = more points |
+| 4 | Acousticness proximity | **up to +1.0** | `1.0 × (1 - \|target_acousticness - song.acousticness\|)` |
+| 5 | Instrumentalness proximity | **up to +1.0** | `1.0 × (1 - \|target_instrumentalness - song.instrumentalness\|)` |
+| 6 | Valence proximity | **up to +0.5** | `0.5 × (1 - \|target_valence - song.valence\|)` |
+| 7 | Speechiness proximity | **up to +0.5** | `0.5 × (1 - \|target_speechiness - song.speechiness\|)` |
+
+**Maximum possible score: 9.5 points.**
+All songs are then sorted by total score (highest first) and the top-k are returned as recommendations.
+
+**Why these weights?** Genre (3.0) outweighs everything else because a genre mismatch is the most jarring recommendation failure — a jazz fan getting a rock song feels broken regardless of how well the energy matches. Mood (2.0) comes second because it sets the listening context. The numerical features (energy, acousticness, etc.) act as fine-tuning after the categorical filters have done the heavy lifting.
+
+### Data Flow Diagram
+
+The diagram below shows how a single song travels from the CSV file to a ranked result:
+
+![Data Flow Diagram](mermaid-diagram.png)
+
+```mermaid
+flowchart TD
+    PREFS[/"User Preferences\ngenre · mood · target_energy\ntarget_acousticness · target_instrumentalness · ..."/]
+    CSV[("data/songs.csv\n18 songs")]
+
+    CSV --> LOAD["load_songs()\nparse CSV rows into list of dicts"]
+    PREFS --> RECS
+    LOAD --> RECS["recommend_songs(user_prefs, songs, k)"]
+
+    RECS --> LOOP["For each song in the catalog"]
+    LOOP --> SCORE["score_song(user_prefs, song)"]
+
+    SCORE --> G["Genre match?    → +3.0"]
+    G     --> M["Mood match?     → +2.0"]
+    M     --> EN["Energy proximity    → up to +1.5"]
+    EN    --> AC["Acousticness proximity  → up to +1.0"]
+    AC    --> IN["Instrumentalness proximity → up to +1.0"]
+    IN    --> VA["Valence proximity   → up to +0.5"]
+    VA    --> SP["Speechiness proximity   → up to +0.5"]
+    SP    --> SUM(["Total score + reasons list"])
+
+    SUM -->|"next song"| LOOP
+    LOOP -->|"all 18 songs scored"| RANK["Ranking Rule\nSort all scores descending"]
+    RANK --> OUT[/"Top-k results\nsong · score · explanation string"/]
+```
+
+**Reading the diagram:**
+- The two inputs — user preferences and the CSV — feed into `recommend_songs()` at the top
+- The loop node represents `recommend_songs()` iterating; each pass calls `score_song()` once
+- Inside `score_song()` the seven scoring steps run in order and accumulate a total
+- After all songs are scored the loop exits into the Ranking Rule (a single `sorted()` call)
+- The output is a list of `(song, score, explanation)` tuples, sliced to the top-k
 
 ---
 
@@ -68,25 +144,35 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+The screenshots below show the terminal output from running `python -m src.main`, displaying song titles, scores, score bars, and the reasons behind each recommendation for all three user profiles.
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+![Terminal Output 1](Screenshot1.png)
+![Terminal Output 2](Screenshot 2.png)
+![Terminal Output 3](Screenshot3.png)
+![Terminal Output 4](Screenshot4.png)
+![Terminal Output 5](Screenshot5.png)
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
+### Potential Biases
 
-Examples:
+**Genre over-prioritization.** Genre carries 3.0 points — more than mood, energy, acousticness, instrumentalness, valence, and speechiness combined (max 5.5 pts). This means a mediocre pop song that matches the user's genre will almost always outscore a genuinely great lofi song that matches every numerical preference. The system might over-prioritize genre, ignoring great songs that fit the user's mood and energy perfectly but sit in the "wrong" genre bucket.
 
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
+**Catalog representation bias.** The 18-song catalog skews toward Western genres and mostly reflects a young, English-speaking listener's taste. Genres like K-pop, Latin, Afrobeats, or classical Indian music are absent. A user whose preferred genre is not in the catalog will get zero genre-match points for every song, making the recommender fall back on mood and energy alone — a much weaker signal.
 
-You will go deeper on this in your model card.
+**Mood label subjectivity.** Mood labels like "chill" or "intense" were assigned manually and reflect one person's interpretation. Two people might describe the same song differently. The system treats these labels as objective facts, which means it will confidently match or mismatch based on labels that could be wrong.
+
+**No diversity enforcement.** The ranking rule returns the top-k highest-scoring songs with no diversity check. For a lofi-focused user, all 5 recommendations could be lofi tracks — technically correct but offering no discovery or variety.
+
+**Cold start problem.** The system only knows what the user explicitly tells it. A new user who says `genre: lofi` but does not specify `target_energy` or `target_instrumentalness` will get weaker, less personalized results because optional features default to neutral values rather than learned preferences.
+
+### Other Limitations
+
+- Works on a catalog of only 18 songs — real recommenders use millions
+- Does not understand lyrics, language, cultural context, or artist relationships
+- Scores are not normalized, so adding or removing features changes the scale and breaks comparability across experiments
 
 ---
 

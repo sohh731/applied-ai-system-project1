@@ -1,11 +1,19 @@
-id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness
-1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18
-2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71
-3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10
-4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86
-5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05
-6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92
-7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89
-8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22
-9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78
-10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35
+id,title,artist,genre,mood,energy,tempo_bpm,valence,danceability,acousticness,speechiness,instrumentalness
+1,Sunrise City,Neon Echo,pop,happy,0.82,118,0.84,0.79,0.18,0.05,0.00
+2,Midnight Coding,LoRoom,lofi,chill,0.42,78,0.56,0.62,0.71,0.04,0.87
+3,Storm Runner,Voltline,rock,intense,0.91,152,0.48,0.66,0.10,0.06,0.00
+4,Library Rain,Paper Lanterns,lofi,chill,0.35,72,0.60,0.58,0.86,0.03,0.92
+5,Gym Hero,Max Pulse,pop,intense,0.93,132,0.77,0.88,0.05,0.08,0.00
+6,Spacewalk Thoughts,Orbit Bloom,ambient,chill,0.28,60,0.65,0.41,0.92,0.02,0.95
+7,Coffee Shop Stories,Slow Stereo,jazz,relaxed,0.37,90,0.71,0.54,0.89,0.04,0.78
+8,Night Drive Loop,Neon Echo,synthwave,moody,0.75,110,0.49,0.73,0.22,0.05,0.11
+9,Focus Flow,LoRoom,lofi,focused,0.40,80,0.59,0.60,0.78,0.03,0.89
+10,Rooftop Lights,Indigo Parade,indie pop,happy,0.76,124,0.81,0.82,0.35,0.06,0.00
+11,Block by Block,Flow State,hip-hop,motivated,0.78,96,0.72,0.85,0.08,0.28,0.00
+12,Velvet Morning,Jasmine Keys,r&b,romantic,0.55,88,0.74,0.76,0.31,0.09,0.00
+13,Autumn Sonata,Clara Voss,classical,melancholic,0.22,52,0.32,0.28,0.97,0.03,0.98
+14,Gravel Road Home,Dusty Pines,country,nostalgic,0.51,104,0.66,0.61,0.72,0.07,0.00
+15,Drop Zone,Circuit Breaker,edm,euphoric,0.97,140,0.83,0.94,0.02,0.04,0.72
+16,Wildflower Lullaby,June Sparrow,folk,dreamy,0.30,68,0.58,0.44,0.91,0.05,0.12
+17,Island Echo,Sunroot,reggae,happy,0.58,86,0.80,0.79,0.55,0.10,0.04
+18,3 AM Diner,Ray Hollow,blues,sad,0.44,74,0.27,0.49,0.83,0.06,0.15
