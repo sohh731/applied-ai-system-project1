@@ -13,6 +13,12 @@ try:
 except ModuleNotFoundError:
     from src.recommender import load_songs, recommend_songs, SCORING_MODES
 
+try:
+    from tabulate import tabulate
+    _TABULATE_AVAILABLE = True
+except ImportError:
+    _TABULATE_AVAILABLE = False
+
 
 # ---------------------------------------------------------------------------
 # USER TASTE PROFILES
@@ -155,6 +161,88 @@ def print_mode_comparison(label: str, user_prefs: dict, songs: list, k: int = 3)
     print(f"{'#' * 60}")
     for mode in modes:
         print_recommendations(label, user_prefs, songs, k=k, mode=mode)
+
+
+# ---------------------------------------------------------------------------
+# VISUAL SUMMARY TABLE
+#
+# Copilot prompt that inspired this design:
+#   "Using tabulate with tablefmt='grid', build a summary table for the top-k
+#    recommendations. Each row must show: rank, song title and artist (stacked),
+#    genre / mood / energy (stacked), a 10-char score bar with numeric score,
+#    and all scoring reasons as a bulleted multi-line cell. Use \n inside each
+#    cell string so tabulate renders them as wrapped lines within the grid."
+#
+# tabulate's 'grid' format is the key: it draws box-drawing borders around
+# every cell and honours \n as a line break inside the cell, which lets the
+# reasons column expand vertically without truncating any explanation.
+# ---------------------------------------------------------------------------
+
+def _make_score_bar(score: float, max_score: float = 13.0, width: int = 10) -> str:
+    """Returns a compact ASCII score bar, e.g. '|######----|  8.86'."""
+    filled = min(width, int((score / max_score) * width))
+    bar = "#" * filled + "-" * (width - filled)
+    return f"|{bar}| {score:>5.2f}"
+
+
+def print_summary_table(
+    label: str,
+    user_prefs: dict,
+    songs: list,
+    k: int = 5,
+    mode: str = "balanced",
+    diversity: bool = True,
+) -> None:
+    """Prints a formatted tabulate grid table of the top-k recommendations.
+
+    Each row contains: rank, song/artist, genre/mood/energy, score bar, and
+    all scoring reasons as a multi-line bulleted cell. Falls back to the
+    plain print_recommendations() output if tabulate is not installed.
+    """
+    if not _TABULATE_AVAILABLE:
+        print("  [tabulate not installed — falling back to plain output]")
+        print_recommendations(label, user_prefs, songs, k=k, mode=mode,
+                              diversity=diversity)
+        return
+
+    results = recommend_songs(user_prefs, songs, k=k, mode=mode,
+                              diversity=diversity)
+
+    headers = ["#", "Song / Artist", "Genre / Mood / Energy", "Score", "Why (scoring reasons)"]
+    rows = []
+    for rank, (song, score, explanation) in enumerate(results, start=1):
+        # Column 1 — rank
+        rank_cell = str(rank)
+
+        # Column 2 — title stacked above artist
+        song_cell = f"{song['title']}\n{song['artist']}"
+
+        # Column 3 — genre / mood / energy stacked
+        info_cell = (
+            f"genre : {song['genre']}\n"
+            f"mood  : {song['mood']}\n"
+            f"energy: {song['energy']}"
+        )
+
+        # Column 4 — score bar + numeric score
+        score_cell = _make_score_bar(score)
+
+        # Column 5 — reasons, one bullet per line
+        reasons = [r.strip() for r in explanation.split(";") if r.strip()]
+        reasons_cell = "\n".join(f"* {r}" for r in reasons)
+
+        rows.append([rank_cell, song_cell, info_cell, score_cell, reasons_cell])
+
+    diversity_label = "ON" if diversity else "OFF"
+    print(f"\n{'=' * 80}")
+    print(f"  SUMMARY TABLE  |  {label}")
+    print(f"  Mode: {mode.upper():<18} Diversity: {diversity_label:<6} "
+          f"Genre: {user_prefs.get('genre','any').upper():<10} "
+          f"Mood: {user_prefs.get('mood','-').upper():<10} "
+          f"Energy: {user_prefs.get('target_energy','-')}")
+    print(f"{'=' * 80}")
+    print(tabulate(rows, headers=headers, tablefmt="grid"))
+    print()
 
 
 def main() -> None:
@@ -338,6 +426,26 @@ def main() -> None:
     print("  Switching modes changes the weight table inside the scorer.")
     print("  The same 18 songs are scored every time — only the math changes.")
     print_mode_comparison("High-Energy Pop", high_energy_pop, songs, k=3)
+
+    # -----------------------------------------------------------------------
+    # VISUAL SUMMARY TABLES
+    # Each table shows the same information as the plain output but in a
+    # tabulate 'grid' format: every cell has a border, and the reasons column
+    # expands vertically so no explanation is truncated or hidden.
+    # Three representative profiles are shown — one standard, one adversarial,
+    # one advanced — so the table format is demonstrated across different
+    # scoring densities (few reasons vs many reasons per row).
+    # -----------------------------------------------------------------------
+    print("\n" + "#" * 80)
+    print("  VISUAL SUMMARY TABLES  (tabulate grid format)")
+    print("  Reasons column expands vertically — no explanations are truncated.")
+    print("#" * 80)
+    print_summary_table("High-Energy Pop", high_energy_pop, songs, k=5,
+                        mode="balanced", diversity=True)
+    print_summary_table("Chill Lofi — diversity ON", chill_lofi, songs, k=5,
+                        mode="balanced", diversity=True)
+    print_summary_table("Ghost Genre (metal)", ghost_genre, songs, k=5,
+                        mode="balanced", diversity=True)
 
 
 if __name__ == "__main__":
