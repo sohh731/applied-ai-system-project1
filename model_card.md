@@ -6,74 +6,144 @@
 
 ---
 
-## 2. Intended Use
+## 2. Goal / Task
 
-VibeFinder 1.0 suggests songs from an 18-song catalog based on a user's stated genre, mood, and audio feature preferences. It is designed for classroom exploration of how content-based recommender systems work — not for real users or production use. The system assumes the user can explicitly state their preferences (genre, mood, target energy level) rather than learning them from listening history. It makes no personalization over time and has no memory between sessions.
+VibeFinder 1.0 suggests songs from a small catalog based on what a user tells it they want to hear.
 
----
+The user gives it a genre, a mood, and a target energy level. The system finds the songs that match those preferences most closely and returns the top results ranked from best to worst.
 
-## 3. How the Model Works
-
-Every song in the catalog is given a score by comparing it against the user's preferences. The score is built from two types of checks. First, categorical checks: if a song's genre matches what the user wants, it earns points; same for mood. Second, proximity checks: for features like energy, acousticness, and instrumentalness, the system measures how close the song's value is to the user's target — the closer, the more points earned. A song with energy 0.82 scores nearly full points for a user who wants energy 0.85, but scores much less for a user who wants energy 0.40. Once every song has a score, they are sorted from highest to lowest and the top results are returned. Each result also includes a plain-language explanation of which features contributed to its score and how many points each one earned.
+It is not trying to learn from behavior or listening history. It only works with what the user explicitly tells it.
 
 ---
 
-## 4. Data
+## 3. Data Used
 
-The catalog contains 18 songs across 12 genres: pop, lofi, rock, ambient, jazz, synthwave, indie pop, hip-hop, R&B, classical, country, EDM, folk, reggae, and blues. Moods represented include happy, chill, intense, relaxed, focused, moody, motivated, romantic, melancholic, nostalgic, euphoric, dreamy, and sad. The original starter file had 10 songs; 8 were added to fill genre and mood gaps. Each song has 10 audio features: genre, mood, energy, tempo, valence, danceability, acousticness, speechiness, and instrumentalness. The catalog reflects mostly Western, English-language music conventions. Genres like K-pop, Latin, Afrobeats, and classical Indian music are entirely absent. Most songs were invented for this simulation and do not reflect real listening data or real user behavior.
+The catalog has 18 songs.
 
----
+Each song has 10 features: genre, mood, energy, tempo, valence, danceability, acousticness, speechiness, and instrumentalness.
 
-## 5. Strengths
+Genres in the catalog: pop, lofi, rock, ambient, jazz, synthwave, indie pop, hip-hop, R&B, classical, country, EDM, folk, reggae, and blues.
 
-The system works well for users with clear, specific preferences — particularly when their target genre exists in the catalog and their energy target is close to at least one song. The study session profile (lofi, focused, energy 0.40) consistently returns Focus Flow at 9.48/9.50, which matches the musical intuition perfectly. The explanation feature is a genuine strength: every recommendation shows the exact points each feature contributed, making the system fully transparent and easy to debug. This transparency also helps expose when the system is getting the right answer for the wrong reasons.
+Moods in the catalog: happy, chill, intense, relaxed, focused, moody, motivated, romantic, melancholic, nostalgic, euphoric, dreamy, and sad.
 
----
+The catalog only has one or two songs per genre. That is a big limitation. With so few songs, the recommendations can feel repetitive.
 
-## 6. Limitations and Bias
-
-**Filter bubble from small catalog size.** The most significant weakness discovered during experiments is that the catalog is too small for genre-based filtering to be meaningful. With only one rock song in 18 songs, a user who prefers rock receives Storm Runner as their #1 result — and then falls off a cliff, with songs from completely unrelated genres filling positions #2 through #5. The system creates a false sense of confidence: it returns 5 results with clean score bars, but positions #3 through #5 are essentially random noise. In a real recommender, this would be called a filter bubble — the user never discovers music outside their stated genre because the catalog cannot support genuine variety.
-
-**Energy gap bias against extreme preferences.** The energy proximity formula treats a gap of 0.5 as simply half points, but in practice this means users with very low energy targets (e.g., 0.10 for meditation music) are penalized far more harshly than users near the middle of the scale. A user who wants energy 0.10 loses 0.72 points on a song with energy 0.82, while a user who wants energy 0.50 loses only 0.32 points on the same song. This asymmetry means calm-preference users consistently get worse results from the same catalog.
-
-**Ghost genre problem — silent failure.** When a user specifies a genre that does not exist in the catalog (such as "metal"), the system returns zero genre-match points for every song and quietly falls back to mood and energy. The user receives confident-looking recommendations — Storm Runner, Gym Hero — with no warning that their primary preference was completely unmet. A real system would surface a "no results for your genre" message rather than pretending to help.
-
-**Mood label subjectivity.** Mood labels like "chill," "intense," and "moody" were assigned manually and reflect a single perspective. Two people might disagree on whether Night Drive Loop is "moody" or "focused." The system treats these labels as objective facts and matches them exactly, meaning a user who thinks of the same song as "relaxing" gets zero mood points even though their intent was correct.
-
-**No diversity enforcement.** The ranking rule returns the top-k highest-scoring songs with no check for variety. For the Chill Lofi profile, all three top results are lofi songs by the same artist (LoRoom). A real recommender would enforce diversity — at most one song per artist, or a mix of genres that still fit the mood — to avoid repetitive recommendations.
+The songs are made up for this simulation. They do not reflect real listening data. Genres like K-pop, Latin, Afrobeats, and classical Indian music are not represented at all.
 
 ---
 
-## 7. Evaluation
+## 4. Algorithm Summary
 
-**Profiles tested:** Seven in total — three standard and four adversarial.
+Every song gets a score by comparing it to what the user wants. Higher score = better match.
+
+The score has two types of checks:
+
+**Categorical checks (yes or no):**
+- If the song's genre matches the user's preferred genre, it earns full genre points.
+- If the song's mood matches the user's preferred mood, it earns full mood points.
+- If the song does not match, it earns zero — there is no penalty, just no reward.
+
+**Proximity checks (how close is close enough):**
+- For features like energy, acousticness, and instrumentalness, the system measures the gap between the song's value and the user's target.
+- The closer the match, the more points the song earns. A perfect match earns the full weight. A gap of 1.0 earns zero.
+- Formula: `points = weight × (1.0 - |target - actual|)`
+
+**Weights (how much each feature is worth):**
+
+| Feature | Max Points |
+|---|---|
+| Genre match | 1.0 |
+| Mood match | 2.0 |
+| Energy proximity | 3.0 |
+| Acousticness proximity | 1.0 |
+| Instrumentalness proximity | 1.0 |
+| Valence proximity | 0.5 |
+| Speechiness proximity | 0.5 |
+
+**Maximum possible score: 9.0 points.**
+
+After every song is scored, they are sorted from highest to lowest. The top results are returned with an explanation of which features contributed points.
+
+---
+
+## 5. Observed Behavior / Biases
+
+**Filter bubble from small catalog.**
+With only one rock song in the catalog, a rock fan gets Storm Runner as #1 and then falls off a cliff. Songs from completely unrelated genres fill spots #2 through #5. The system looks confident but positions #3–#5 are basically random noise.
+
+**No penalty for a bad mood match.**
+The system rewards a genre match but never punishes a mood mismatch. A pop song with the wrong mood (intense instead of happy) still earns its genre points and energy points. This caused Gym Hero (pop, intense) to outrank Rooftop Lights (indie pop, happy) for a user who wanted happy music — until the genre weight was reduced.
+
+**Ghost genre — silent failure.**
+If the user asks for a genre that does not exist in the catalog (like "metal"), every song scores zero genre points. The system quietly falls back to mood and energy and returns confident-looking results. It never tells the user their genre preference was completely ignored.
+
+**Calm preferences are penalized more.**
+A user who wants energy 0.10 loses a lot more points on high-energy songs than a user who wants energy 0.50. The proximity formula treats the gap as linear, but for very extreme preferences, the system consistently struggles to find a good match.
+
+**No variety enforcement.**
+The ranking rule just picks the top-k highest-scoring songs. For the Chill Lofi profile, all three top results are lofi songs by the same artist (LoRoom). A real recommender would try to avoid repeating the same artist.
+
+---
+
+## 6. Evaluation Process
+
+Seven profiles were tested: three standard and four adversarial.
 
 | Profile | Top Result | Score | Matched Intuition? |
 |---|---|---|---|
-| High-Energy Pop (pop, happy, energy 0.85) | Sunrise City | 8.86 | Yes |
-| Chill Lofi (lofi, focused, energy 0.40) | Focus Flow | 9.48 | Yes |
-| Deep Intense Rock (rock, intense, energy 0.91) | Storm Runner | 8.98 | Yes |
-| Edge 1: Conflicting energy + sad mood | 3 AM Diner | 6.79 | Partially — right song, wrong energy |
-| Edge 2: Ghost genre (metal) | Storm Runner (rock) | 7.68 | No — silent wrong-genre failure |
-| Edge 3: EDM + fully instrumental | Drop Zone | 8.71 | Partially — right song, wrong instrumentalness |
-| Edge 4: All-neutral preferences | Gravel Road Home | 5.16 | No — arbitrary result |
+| High-Energy Pop (pop, happy, 0.85) | Sunrise City | 8.86 | Yes |
+| Chill Lofi (lofi, focused, 0.40) | Focus Flow | 9.48 | Yes |
+| Deep Intense Rock (rock, intense, 0.91) | Storm Runner | 8.98 | Yes |
+| Conflicting energy + sad mood | 3 AM Diner | 6.79 | Partially |
+| Ghost genre (metal) | Storm Runner (rock) | 7.68 | No |
+| EDM + fully instrumental | Drop Zone | 8.71 | Partially |
+| All-neutral preferences | Gravel Road Home | 5.16 | No |
 
-**What surprised me most:** The High-Energy Pop profile consistently placed Gym Hero (pop, intense) at #2 even though the user wanted *happy* music, not intense. Gym Hero kept appearing because it shares the exact genre label "pop" with the user's preference — and the system rewarded that match regardless of whether the song's mood was right. This felt wrong musically but made complete sense mathematically: the system does not penalize a mood mismatch, it simply gives zero points for it. Genre match and mood match are both positive rewards; there is no punishment for being in the wrong mood. Gym Hero earned its genre points and its energy proximity points, which was enough to outscore happy songs from other genres.
+**What surprised me most:**
+The High-Energy Pop profile kept putting Gym Hero (pop, intense) at #2 even though the user wanted *happy* music. Gym Hero earned its genre points (pop == pop) and strong energy proximity points. The system does not penalize a mood mismatch — it just gives zero mood points. So Gym Hero and Rooftop Lights competed on genre + energy alone, and Gym Hero won because genre used to carry 3.0 points.
 
-**Weight experiment results:** Running the system with genre=1.0 and energy=3.0 (vs. the original genre=3.0) caused Rooftop Lights (indie pop, happy) to jump from #3 to #2, correctly outranking Gym Hero for the happy pop listener. This confirmed that the Gym Hero problem was not a bug — it was a consequence of genre weight being too high relative to catalog size. The fix made recommendations more accurate without breaking either of the two automated tests.
+**Weight experiment:**
+Reducing genre weight from 3.0 to 1.0 and increasing energy weight from 1.5 to 3.0 caused Rooftop Lights (indie pop, happy) to jump to #2. That felt more musically correct. Both automated tests still passed after the change.
 
-**Most revealing adversarial result:** The "Middle of Everything" profile (all preferences set to 0.5, no genre specified) returned five songs with scores between 5.16 and 5.02 — a spread of only 0.14 points across all 18 songs. This shows the system has no meaningful signal to work with when preferences are vague, and it cannot tell the user that their query was too weak to produce real recommendations.
+**Most revealing adversarial test:**
+The all-neutral profile (every preference at 0.5, no genre set) returned five songs within 0.14 points of each other. The system had no meaningful signal to work with and returned an essentially arbitrary result.
 
 ---
 
-## 8. Future Work
+## 7. Intended Use and Non-Intended Use
 
-The highest-priority improvement would be catalog expansion — at least 10 songs per genre so that genre filtering produces meaningful variety rather than a single correct answer followed by noise. A close second would be adding a diversity enforcement step to the ranking rule, so that no artist appears more than once in the top 5. For the ghost genre problem, a simple pre-check before scoring could detect when the user's genre has zero matches and either warn the user or broaden the search automatically. Longer term, replacing the static `target_energy` with a range (`min_energy`, `max_energy`) would let users express preferences like "between 0.6 and 0.9" rather than a single point, which would reduce the energy gap bias against extreme preferences.
+**Intended use:**
+This system is for classroom exploration of how content-based recommender systems work. It is designed to show students how weighted scoring, feature matching, and catalog limitations affect the results a system returns.
+
+It works best when a user has clear, specific preferences and their preferred genre exists in the catalog.
+
+**Not intended for:**
+- Real music discovery. The catalog is 18 made-up songs.
+- Production use of any kind.
+- Personalization over time. The system has no memory between sessions.
+- Users who cannot or do not want to state their preferences explicitly.
+- Representing diverse global music taste. The catalog is almost entirely Western and English-language.
+
+---
+
+## 8. Ideas for Improvement
+
+**1. Expand the catalog.**
+The most important fix is adding more songs — at least 10 per genre. Right now, genre filtering produces one result and then noise. With a bigger catalog, genre filtering would produce a meaningful shortlist that mood and energy could refine.
+
+**2. Add a diversity enforcement step.**
+The ranking rule should limit how many times the same artist can appear in the top 5. Right now, all three lofi recommendations are by LoRoom. A simple "no more than one song per artist" rule would fix this.
+
+**3. Warn the user when their genre has no matches.**
+Before scoring, check whether the user's genre exists in the catalog. If it does not, tell the user instead of silently falling back. Something like "No songs found for genre: metal — showing closest matches by mood and energy instead" would be far more honest than returning confident-looking wrong results.
+
+**4. Replace single energy target with a range.**
+Let users say "energy between 0.6 and 0.9" instead of a single point. This would reduce the penalty for extreme preferences and let users express "somewhere in this zone" rather than a precise number.
 
 ---
 
 ## 9. Personal Reflection
 
-Building this recommender made clear how much hidden work the genre label is doing. Before running the weight experiments, it felt natural to give genre a heavy weight — after all, a jazz fan does not want rock recommendations. But with only 18 songs, that heavy weight creates a situation where one or two songs dominate every profile and the rest of the results are filler. The most interesting moment was watching the High-Energy Pop results change when genre weight dropped from 3.0 to 1.0: Rooftop Lights jumped to #2 purely because its mood ("happy") matched the user better than Gym Hero's ("intense") — a result that felt more human and more correct. This changed how I think about real apps like Spotify: their recommendations likely feel good not because the algorithm is smarter, but because their catalog is large enough that genre filtering actually has thousands of songs to choose from, making the heavy genre weight invisible.
+Building this recommender made clear how much hidden work the genre label is doing. Before running the weight experiments, it felt natural to give genre a heavy weight — after all, a jazz fan does not want rock recommendations. But with only 18 songs, that heavy weight creates a situation where one or two songs dominate every profile and the rest of the results are filler.
 
----
+The most interesting moment was watching the High-Energy Pop results change when genre weight dropped from 3.0 to 1.0. Rooftop Lights jumped to #2 purely because its mood ("happy") matched the user better than Gym Hero's ("intense"). That result felt more human and more correct. This changed how I think about real apps like Spotify: their recommendations likely feel good not because the algorithm is smarter, but because their catalog is large enough that genre filtering has thousands of songs to choose from — making the heavy genre weight invisible.
