@@ -30,7 +30,7 @@ The system has three main layers:
 
 The architecture shows data flowing from user preferences and song data into the recommender, producing recommendations, and then feeding the results into a testing and evaluation loop.
 
-![System Architecture Diagram](assets/mermaid-diagram.png)
+![System Architecture Diagram](assets/User%20Preference-2026-04-27-014827.png)
 
 ---
 
