@@ -48,7 +48,7 @@ DEFAULTS = {
     "k":                 5,
     "use_agent":         False,
     "use_rag":           False,
-    "explanation_style": "baseline",
+    "explanation_style": "casual",
 }
 
 for key, val in DEFAULTS.items():
@@ -224,7 +224,33 @@ with tab_rec:
                     conf = round(score / 13.0, 2)
                     st.metric("Score", f"{score:.2f}", delta=f"conf {conf:.2f}")
                 with st.expander("Why this recommendation?"):
-                    st.code(explanation, language=None)
+                    current_style = st.session_state.explanation_style
+                    if current_style == "technical":
+                        # Technical: monospace code block suits the numerical format
+                        st.code(explanation, language=None)
+                    elif "\n" in explanation and "[" in explanation:
+                        # RAG augmented: split into scoring part and retrieved context
+                        parts = explanation.split("\n", 1)
+                        scoring = parts[0]
+                        context = parts[1] if len(parts) > 1 else ""
+                        st.markdown("**Scoring reasons:**")
+                        for reason in scoring.split(";"):
+                            reason = reason.strip()
+                            if reason:
+                                st.markdown(f"- {reason}")
+                        if context:
+                            st.markdown("**Retrieved context:**")
+                            st.code(context, language=None)
+                    elif ";" in explanation and current_style == "baseline":
+                        # Baseline: convert semicolons to bullet points
+                        st.markdown("**Why this song matched:**")
+                        for reason in explanation.split(";"):
+                            reason = reason.strip()
+                            if reason:
+                                st.markdown(f"- {reason}")
+                    else:
+                        # Casual / DJ: plain readable text
+                        st.write(explanation)
 
         # Agent decision log
         if use_agent and agent_log:
