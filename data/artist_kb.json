@@ -1,0 +1,98 @@
+{
+  "Neon Echo": {
+    "style": "Polished synthpop production with bright, punchy drum machines and layered synthesizers. Known for energetic, radio-ready hooks.",
+    "influences": ["Daft Punk", "Disclosure", "Chromeo"],
+    "typical_listener": "Pop fans who want electronic texture without losing accessibility.",
+    "catalog_notes": "Two songs in this catalog: Sunrise City (pop/happy) and Night Drive Loop (synthwave/moody). Distinct moods but consistent production polish."
+  },
+  "LoRoom": {
+    "style": "Classic lo-fi hip hop. Warm vinyl crackle, jazz-sampled loops, minimal percussion. Entirely instrumental.",
+    "influences": ["Nujabes", "J Dilla", "Tomppabeats"],
+    "typical_listener": "Students, coders, and remote workers who need non-distracting background music.",
+    "catalog_notes": "Two songs: Midnight Coding (chill) and Focus Flow (focused). Focus Flow has the higher instrumentalness score (0.89) — the go-to for deep work."
+  },
+  "Voltline": {
+    "style": "Heavy, guitar-forward rock with aggressive drumming and high dynamic range. No electronic softening.",
+    "influences": ["Muse", "Queens of the Stone Age", "Bring Me the Horizon"],
+    "typical_listener": "Rock and metal fans looking for intense, high-energy tracks.",
+    "catalog_notes": "One song in catalog: Storm Runner (rock/intense, energy=0.91). Closest substitute for metal in this catalog."
+  },
+  "Paper Lanterns": {
+    "style": "Minimal lo-fi with heavy acoustic and ambient leanings. Very low energy, almost meditative.",
+    "influences": ["Hammock", "Boards of Canada"],
+    "typical_listener": "Listeners who want background music that disappears into the room.",
+    "catalog_notes": "One song: Library Rain (lofi/chill, energy=0.35, instrumentalness=0.92). Among the most instrumental tracks in the catalog."
+  },
+  "Max Pulse": {
+    "style": "High-energy workout and sports pop. Compressed, punchy production designed for physical exertion.",
+    "influences": ["The Chainsmokers", "David Guetta"],
+    "typical_listener": "Gym users and athletes who need motivational energy, not lyrical depth.",
+    "catalog_notes": "One song: Gym Hero (pop/intense, energy=0.93). Highest energy pop track in the catalog. Frequently surfaces for high-energy queries even when mood doesn't match."
+  },
+  "Orbit Bloom": {
+    "style": "Ambient and space music. Long sustained pads, no percussion, fully instrumental. Designed for immersive listening.",
+    "influences": ["Brian Eno", "Stars of the Lid", "William Basinski"],
+    "typical_listener": "Meditators, yoga practitioners, and background-listening minimalists.",
+    "catalog_notes": "One song: Spacewalk Thoughts (ambient/chill, energy=0.28, instrumentalness=0.95). One of the lowest-energy tracks in the catalog."
+  },
+  "Slow Stereo": {
+    "style": "Vintage jazz with a coffee-shop warmth. Light acoustic guitar, brushed drums, muted trumpet. 2000s-era production feel.",
+    "influences": ["Chet Baker", "Miles Davis (Kind of Blue era)", "Norah Jones"],
+    "typical_listener": "Jazz listeners and lofi fans who want acoustic warmth with more harmonic complexity than lofi loops.",
+    "catalog_notes": "One song: Coffee Shop Stories (jazz/relaxed, 2000s era, detail_mood=nostalgic). High liveness score (0.45) gives it a live-room feel."
+  },
+  "Indigo Parade": {
+    "style": "Indie pop with bright guitar tones and emotionally direct lyrics. More organic than mainstream pop.",
+    "influences": ["Alvvays", "Vampire Weekend", "Phoebe Bridgers"],
+    "typical_listener": "Listeners who want pop hooks with a personal, handmade feel.",
+    "catalog_notes": "One song: Rooftop Lights (indie pop/happy, energy=0.76). Frequently the second-choice for pop/happy queries because genre is 'indie pop', not 'pop'."
+  },
+  "Flow State": {
+    "style": "Underground hip-hop with raw production and aggressive lyrical delivery. Low mainstream appeal by design.",
+    "influences": ["Kendrick Lamar", "Joey Bada$$", "Flatbush Zombies"],
+    "typical_listener": "Hip-hop fans who prioritize authenticity and lyrical complexity over chart performance.",
+    "catalog_notes": "One song: Block by Block (hip-hop/motivated, popularity=74, detail_mood=aggressive). Target for users with low target_popularity preferences."
+  },
+  "Circuit Breaker": {
+    "style": "Festival EDM. Maximum BPM, hard bass drops, euphoric buildups engineered for large crowd response.",
+    "influences": ["Martin Garrix", "Skrillex", "Zedd"],
+    "typical_listener": "Club and festival goers. Not designed for headphone or home listening.",
+    "catalog_notes": "One song: Drop Zone (edm/euphoric, energy=0.97, loudness=0.95). Highest energy and loudness track in the entire catalog."
+  },
+  "Clara Voss": {
+    "style": "Solo classical piano with a melancholic, introspective tone. Sparse, slow, and fully acoustic.",
+    "influences": ["Erik Satie", "Ludovico Einaudi", "Johann Sebastian Bach"],
+    "typical_listener": "Classical listeners and ambient fans who want emotional depth without lyrical content.",
+    "catalog_notes": "One song: Autumn Sonata (classical/melancholic, energy=0.22, instrumentalness=0.98). The most acoustic and most instrumental track in the catalog."
+  },
+  "Dusty Pines": {
+    "style": "Narrative country-folk. Acoustic guitar, storytelling lyrics, nostalgic production with warm tape sound.",
+    "influences": ["John Prine", "Kacey Musgraves", "Jason Isbell"],
+    "typical_listener": "Country and Americana fans who value lyrical storytelling over production.",
+    "catalog_notes": "One song: Gravel Road Home (country/nostalgic, 2000s era). Surfaces in all-neutral queries because its mid-range values sit close to 0.5 on most features."
+  },
+  "Jasmine Keys": {
+    "style": "Smooth R&B with soulful vocal delivery and groove-based production. Romantic and emotionally warm.",
+    "influences": ["H.E.R.", "Daniel Caesar", "Jhene Aiko"],
+    "typical_listener": "R&B fans and listeners seeking romantic, late-night background music.",
+    "catalog_notes": "One song: Velvet Morning (r&b/romantic, energy=0.55). The only R&B track in the catalog."
+  },
+  "June Sparrow": {
+    "style": "Acoustic folk with a dreamlike quality. Fingerpicked guitar, breathy vocals, organic texture.",
+    "influences": ["Sufjan Stevens", "Bon Iver", "Iron & Wine"],
+    "typical_listener": "Folk and indie listeners who prefer quiet, intimate listening experiences.",
+    "catalog_notes": "One song: Wildflower Lullaby (folk/dreamy, energy=0.30, acousticness=0.91). High liveness (0.35) adds a live-recording intimacy."
+  },
+  "Sunroot": {
+    "style": "Reggae with a warm Caribbean groove. Off-beat guitar, heavy bass, and a positive, carefree mood.",
+    "influences": ["Bob Marley", "Toots and the Maytals", "Stick Figure"],
+    "typical_listener": "Reggae fans and listeners who want feel-good, relaxed music without being sedated.",
+    "catalog_notes": "One song: Island Echo (reggae/happy, energy=0.58). Only reggae track in the catalog. Surfaces for happy-mood queries when genre constraint is relaxed."
+  },
+  "Ray Hollow": {
+    "style": "Late-night blues with a raw, minimalist production. Acoustic guitar, slow tempo, emotionally heavy.",
+    "influences": ["Robert Johnson", "John Lee Hooker", "Gary Clark Jr."],
+    "typical_listener": "Blues fans and late-night listeners who want emotional honesty over production polish.",
+    "catalog_notes": "One song: 3 AM Diner (blues/sad, energy=0.44). Only sad-mood track in the catalog. Surfaces for sad/melancholic queries even when energy doesn't match."
+  }
+}

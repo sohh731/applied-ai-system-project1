@@ -1,0 +1,122 @@
+{
+  "pop": {
+    "description": "Pop music is polished and hook-driven, optimized for broad emotional appeal and radio play.",
+    "characteristics": ["catchy hooks", "verse-chorus structure", "polished production", "accessible lyrics", "danceable beats"],
+    "energy_profile": "0.6-0.95 (moderate to high)",
+    "listening_context": "parties, commutes, working out, casual social settings",
+    "related_genres": ["indie pop", "r&b", "dance pop"],
+    "what_distinguishes": "Pop prioritizes emotional accessibility. Instantly likeable without demanding attention from the listener."
+  },
+  "lofi": {
+    "description": "Lo-fi hip hop blends jazz-influenced samples with hip hop beats and deliberate low-fidelity texture for a relaxed, nostalgic feel.",
+    "characteristics": ["low energy", "vinyl crackle texture", "minimal or no vocals", "repetitive loops", "warm acoustic tones"],
+    "energy_profile": "0.2-0.5 (low to moderate)",
+    "listening_context": "studying, reading, coding, late-night focus sessions, relaxed background listening",
+    "related_genres": ["jazz", "ambient", "chillhop", "classical"],
+    "what_distinguishes": "Lofi is defined by deliberate imperfection. Slight pitch drift, tape hiss, and gentle repetition create a safe, focused listening environment."
+  },
+  "rock": {
+    "description": "Rock music is driven by electric guitars, bass, and drums with an emphasis on rhythm, dynamics, and raw energy.",
+    "characteristics": ["electric guitar-driven", "high energy", "strong backbeat", "dynamic range", "vocal intensity"],
+    "energy_profile": "0.7-1.0 (high to very high)",
+    "listening_context": "driving, exercising, concerts, emotional release, focused active work",
+    "related_genres": ["metal", "punk", "indie rock", "blues"],
+    "what_distinguishes": "Rock channels emotional intensity through volume, distortion, and rhythmic drive. It rewards active listening rather than background use."
+  },
+  "jazz": {
+    "description": "Jazz is an improvisational genre built on complex harmonies, syncopated rhythms, and expressive instrumental solos.",
+    "characteristics": ["improvisation", "complex harmony", "swing rhythm", "acoustic instruments", "call-and-response structures"],
+    "energy_profile": "0.3-0.7 (low to moderate)",
+    "listening_context": "coffee shops, dinner backgrounds, late-night relaxation, focused listening sessions",
+    "related_genres": ["blues", "lofi", "soul", "r&b", "classical"],
+    "what_distinguishes": "Jazz rewards repeated listening. Patterns that seem abstract on first hearing reveal layered structure over time."
+  },
+  "ambient": {
+    "description": "Ambient music uses texture and atmosphere over melody or rhythm, designed to fill space without demanding attention.",
+    "characteristics": ["minimal rhythm", "atmospheric texture", "very low energy", "wide dynamic space", "fully instrumental"],
+    "energy_profile": "0.1-0.4 (very low to low)",
+    "listening_context": "meditation, sleep preparation, background presence, focus work requiring no distraction",
+    "related_genres": ["lofi", "classical", "electronic", "folk"],
+    "what_distinguishes": "Ambient music deliberately avoids focal points. It is designed to be felt rather than heard — a sonic environment rather than a performance."
+  },
+  "synthwave": {
+    "description": "Synthwave is a nostalgic electronic genre that emulates the synthesizer-heavy sound of 1980s film scores and pop music.",
+    "characteristics": ["analog synthesizers", "driving basslines", "retro-futuristic aesthetic", "mid-range energy", "cinematic feel"],
+    "energy_profile": "0.6-0.85 (moderate to high)",
+    "listening_context": "night drives, gaming sessions, retro-themed events, focused evening work",
+    "related_genres": ["edm", "electronic", "pop", "ambient"],
+    "what_distinguishes": "Synthwave is defined by nostalgia for an imagined 1980s future. The sound is warm, analog, and cinematic rather than the sharp digital clarity of modern EDM."
+  },
+  "indie pop": {
+    "description": "Indie pop combines pop songwriting structures with independent production aesthetics — more personal and less polished than mainstream pop.",
+    "characteristics": ["jangly guitars", "introspective lyrics", "moderate energy", "organic production", "emotional directness"],
+    "energy_profile": "0.5-0.8 (moderate to moderately high)",
+    "listening_context": "quiet afternoons, road trips, personal playlists, emotional processing",
+    "related_genres": ["pop", "folk", "alternative"],
+    "what_distinguishes": "Indie pop trades commercial gloss for emotional intimacy. It sounds like music made by someone who really means it, produced without label pressure."
+  },
+  "hip-hop": {
+    "description": "Hip-hop is built on rhythm, rhyme, and sampling culture, with spoken or sung vocals over a beat that carries the primary musical energy.",
+    "characteristics": ["vocal-forward", "beat-driven", "high speechiness", "sampling culture", "rhythm as primary structure"],
+    "energy_profile": "0.6-0.95 (moderate to very high)",
+    "listening_context": "workouts, commutes, hype sessions, focused creative work, social settings",
+    "related_genres": ["r&b", "soul", "pop"],
+    "what_distinguishes": "Hip-hop treats rhythm and language as equally important instruments. The beat and the words are structurally inseparable."
+  },
+  "r&b": {
+    "description": "R&B (Rhythm and Blues) blends soul, gospel, and pop with emotive vocal performances and groove-based production.",
+    "characteristics": ["smooth vocal delivery", "groove-oriented", "emotional depth", "moderate energy", "romantic or introspective themes"],
+    "energy_profile": "0.4-0.75 (moderate)",
+    "listening_context": "date nights, late evenings, background for intimate settings, emotional music listening",
+    "related_genres": ["soul", "pop", "hip-hop", "jazz"],
+    "what_distinguishes": "R&B centers the voice as an emotional instrument. The groove supports the performance rather than driving it independently."
+  },
+  "classical": {
+    "description": "Classical music is formal Western concert music spanning several centuries, characterized by compositional complexity and purely acoustic instrumentation.",
+    "characteristics": ["fully acoustic", "formally structured", "wide dynamic range", "instrumental complexity", "very low speechiness"],
+    "energy_profile": "0.1-0.6 (very low to moderate)",
+    "listening_context": "focused study, stress relief, concert listening, background for reading or intellectual work",
+    "related_genres": ["ambient", "jazz", "folk"],
+    "what_distinguishes": "Classical music rewards full attention. Its emotional complexity reveals itself slowly across multiple hearings, unlike pop's immediate impact."
+  },
+  "country": {
+    "description": "Country music emphasizes storytelling through lyrics, acoustic instrumentation, and a connection to rural or working-class American experience.",
+    "characteristics": ["narrative lyrics", "acoustic guitar", "moderate energy", "vocal storytelling", "authentic emotional delivery"],
+    "energy_profile": "0.4-0.8 (moderate)",
+    "listening_context": "road trips, outdoor settings, social gatherings, reflective or nostalgic listening",
+    "related_genres": ["folk", "blues", "americana"],
+    "what_distinguishes": "Country music is primarily a lyric-first genre. The story the song tells carries more weight than the production or instrumentation."
+  },
+  "edm": {
+    "description": "Electronic Dance Music is engineered for maximum dancefloor energy, with driving beats, bass drops, and euphoric buildups designed for crowd response.",
+    "characteristics": ["high BPM", "bass drops", "synthesized production", "very high energy", "build-drop structure"],
+    "energy_profile": "0.85-1.0 (very high)",
+    "listening_context": "clubs, music festivals, high-energy workout playlists, gaming sessions requiring peak focus",
+    "related_genres": ["synthwave", "pop", "house", "trance"],
+    "what_distinguishes": "EDM is architecture for the body. Every element — the build, the drop, the breakdown — is engineered to produce a physical crowd response at a specific moment."
+  },
+  "folk": {
+    "description": "Folk music is acoustic, lyric-driven, and rooted in storytelling traditions, often reflecting cultural identity or personal experience.",
+    "characteristics": ["acoustic-only", "narrative lyrics", "low energy", "organic texture", "minimal production"],
+    "energy_profile": "0.2-0.5 (low)",
+    "listening_context": "quiet evenings, introspective sessions, acoustic settings, campfire or intimate listening",
+    "related_genres": ["country", "indie pop", "classical", "blues"],
+    "what_distinguishes": "Folk strips music to its essentials: voice, acoustic instrument, and story. Nothing is included that does not serve the narrative."
+  },
+  "reggae": {
+    "description": "Reggae is a Jamaican genre defined by syncopated off-beat rhythms, heavy bass, and themes of social consciousness and communal joy.",
+    "characteristics": ["off-beat guitar rhythm", "heavy bass", "relaxed tempo", "positive or socially conscious themes", "Caribbean groove"],
+    "energy_profile": "0.4-0.7 (moderate)",
+    "listening_context": "relaxing outdoors, beach and warm-weather settings, social gatherings, feel-good listening",
+    "related_genres": ["r&b", "folk", "pop"],
+    "what_distinguishes": "Reggae's signature is the off-beat guitar chop — the instrument hits between the main beats, creating the characteristic sway that defines the genre."
+  },
+  "blues": {
+    "description": "Blues is the emotional root of rock, jazz, and R&B, built on 12-bar chord progressions, call-and-response vocals, and raw emotional expression.",
+    "characteristics": ["12-bar chord structure", "bending guitar notes", "expressive vocals", "low-moderate energy", "melancholic or cathartic themes"],
+    "energy_profile": "0.3-0.7 (low to moderate)",
+    "listening_context": "late nights, emotional processing, focused listening sessions, rainy-day atmospheres",
+    "related_genres": ["jazz", "rock", "r&b", "folk"],
+    "what_distinguishes": "Blues is the sound of emotional honesty. It does not mask pain — it transforms it into music through repetition, bending notes, and direct vocal expression."
+  }
+}

@@ -14,7 +14,7 @@ except ModuleNotFoundError:
     from src.recommender import load_songs, recommend_songs, SCORING_MODES
 
 try:
-    from tabulate import tabulate
+    from tabulate import tabulate  # type: ignore
     _TABULATE_AVAILABLE = True
 except ImportError:
     _TABULATE_AVAILABLE = False

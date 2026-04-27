@@ -1,18 +1,16 @@
-# Model Card: Music Recommender Simulation
+# Model Card: AI Music Recommender with Reliability & Testing System
 
 ## 1. Model Name
 
-**VibeFinder 1.0**
+**VibeFinder 2.0**
 
 ---
 
 ## 2. Goal / Task
 
-VibeFinder 1.0 suggests songs from a small catalog based on what a user tells it they want to hear.
+VibeFinder 2.0 is an AI-powered music recommender that uses a comprehensive reliability and testing system to ensure consistent, accurate recommendations. The system evaluates its own performance through automated metrics and validation.
 
-The user gives it a genre, a mood, and a target energy level. The system finds the songs that match those preferences most closely and returns the top results ranked from best to worst.
-
-It is not trying to learn from behavior or listening history. It only works with what the user explicitly tells it.
+Unlike the original rule-based version, this system includes built-in quality assurance that measures accuracy, consistency, and performance - treating the recommender itself as an AI system that can be tested and improved.
 
 ---
 
@@ -39,11 +37,15 @@ The catalog only has one or two songs per genre. That is a big limitation. With 
 
 The songs are made up for this simulation. They do not reflect real listening data. Genres like K-pop, Latin, Afrobeats, and classical Indian music are not represented at all.
 
+**Testing Component:** Uses automated test cases with ground truth expectations to evaluate system performance.
+
 ---
 
 ## 4. Algorithm Summary
 
-Every song gets a score by comparing it to what the user wants. Higher score = better match.
+The system combines rule-based scoring with comprehensive reliability testing.
+
+**Rule-Based Scoring:** Every song gets a score by comparing it to user preferences. Higher score = better match.
 
 The score has two types of checks:
 
@@ -74,8 +76,17 @@ The score has two types of checks:
 | Feature | Max Points | Scoring rule |
 |---|---|---|
 | Popularity proximity | 0.5 | Normalized 0–1 before proximity formula |
-| Decade preference | 1.0 | Exact match = 1.0; loses 0.25 pts per decade away |
+| Decade preference | 0.5 | Exact match = 1.0; loses 0.25 pts per decade away |
 | Detail mood match | 1.5 | Exact tag match only; no partial credit |
+| Liveness proximity | 0.5 | Proximity formula |
+| Loudness proximity | 0.5 | Proximity formula |
+
+**Reliability Testing System:**
+- **Consistency Checks:** Validates that identical inputs produce identical outputs
+- **Accuracy Metrics:** Compares recommendations against expected ground truth
+- **Performance Monitoring:** Measures execution time and resource usage
+- **Edge Case Validation:** Tests system behavior with invalid or extreme inputs
+- **Mode Comparison:** Ensures different scoring strategies produce meaningful variations
 | Liveness proximity | 0.5 | Standard proximity formula |
 | Loudness proximity | 0.5 | Standard proximity formula |
 
