@@ -57,6 +57,14 @@ except ModuleNotFoundError:
 MAX_SCORE = 13.0
 
 
+def _safe_float(value):
+    """Safely convert a value to float, returning 0 if conversion fails."""
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        return 0.0
+
+
 # ---------------------------------------------------------------------------
 # PARSER
 # Converts the semicolon-separated reason string produced by _score_core
@@ -124,9 +132,10 @@ def _render_technical(song: dict, records: list, total: float) -> str:
 
         # For proximity features, show percentage
         if "proximity" in r["feature"] and r["value"]:
-            pct = round(float(r["value"]) * 100)
+            float_val = _safe_float(r["value"])
+            pct = round(float_val * 100)
             detail = f"{pct}% match"
-            delta  = round(1.0 - float(r["value"]), 2)
+            delta  = round(1.0 - float_val, 2)
             detail += f"  (delta={delta:.2f})"
         elif "match" in r["feature"] and r["value"]:
             detail = f"EXACT MATCH ({r['value']})"
@@ -172,7 +181,7 @@ def _render_casual(song: dict, records: list, total: float) -> str:
     for r in records:
         feat  = r["feature"]
         value = r["value"]
-        pct   = round(float(value) * 100) if value and "proximity" in feat else 0
+        pct   = round(_safe_float(value) * 100) if value and "proximity" in feat else 0
 
         tmpl = None
         for key, template in _CASUAL_TEMPLATES.items():
@@ -229,7 +238,7 @@ def _render_dj(song: dict, records: list, total: float) -> str:
     for r in records:
         feat  = r["feature"]
         value = r["value"]
-        pct   = round(float(value) * 100) if value and "proximity" in feat else 0
+        pct   = round(_safe_float(value) * 100) if value and "proximity" in feat else 0
 
         tmpl = None
         for key, template in _DJ_TEMPLATES.items():
