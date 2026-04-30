@@ -1,0 +1,5 @@
+[33mca53b56[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m update
+[33md97047c[m fix: default explanation style to casual and improve explanation rendering
+[33m2c66f9b[m feat: add reset button and inline evaluation tab to Streamlit app
+[33mbdd759a[m fix: update architecture diagram to correct image file
+[33m333fe04[m feat: add stretch features, portfolio section, and full project documentation
