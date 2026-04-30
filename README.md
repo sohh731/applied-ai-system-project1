@@ -1,5 +1,8 @@
 ﻿# 🎵 VibeFinder 2.0 — Music Recommender with Reliability Testing
 
+
+
+
 ## Title and Summary
 
 VibeFinder 2.0 is a music recommendation system that suggests songs based on explicit user preferences and verifies its own reliability through integrated testing. It matters because it demonstrates how a practical AI system can deliver explainable recommendations while also measuring its consistency, accuracy, and robustness.
@@ -396,7 +399,7 @@ The AI initially recommended setting the genre weight to **3.0** with the reason
 
 **GitHub Repository:** [https://github.com/sohh731/applied-ai-system-project1](https://github.com/sohh731/applied-ai-system-project1)
 
-**Video Walkthrough (Loom):** *(add your Loom link here after recording)*
+**Video Walkthrough (Loom): https://www.loom.com/share/0ce3613de7d24e7b893f2b49f515e321
 
 ### What This Project Says About Me as an AI Engineer
 
